@@ -28,6 +28,7 @@ public class AssetController {
     @PostMapping("/assets")
     public Asset addAsset(@RequestBody Asset asset){
 
+        //System.out.println("Passed location"+asset.getLocationId());
         log.info("New asset is {}",asset);
         return assetService.addNewAsset(asset);
     }

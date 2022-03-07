@@ -24,11 +24,12 @@ public class Asset {
     private String AssetType;
     private String AssetValue;
     private String AssetCode;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "location_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "location_id",referencedColumnName ="LocationId",insertable = false,updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @Transient
     private Location Location;
+    private Long locationId;
     private String Department;
     private String Custodian;
 }
