@@ -1,6 +1,5 @@
 package com.org.kelvo.assetmanagement.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,17 +12,14 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Asset {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long AssetId;
+public class Custodian {
 
-    private String AssetName;
-    private String SerialNo;
-    private String Model;
-    private String AssetType;
-    private String AssetValue;
-    private String AssetCode;
+    @Id
+    @GeneratedValue
+    private Long custodianId;
+    private String firstName;
+    private String lastName;
+    private String email;
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "location_id",referencedColumnName ="LocationId",insertable = false,updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -36,10 +32,8 @@ public class Asset {
     @Transient
     private Department department;
     private Long departmentId;
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "custodian_id",referencedColumnName ="CustodianId",insertable = false,updatable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Transient
-    private Custodian custodian;
-    private Long custodianId;
+
+
+
+
 }

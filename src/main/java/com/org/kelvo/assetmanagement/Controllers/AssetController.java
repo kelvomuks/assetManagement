@@ -2,8 +2,13 @@ package com.org.kelvo.assetmanagement.Controllers;
 
 
 import com.org.kelvo.assetmanagement.Entities.Asset;
-import com.org.kelvo.assetmanagement.Resources.ResourceNotFound;
+import com.org.kelvo.assetmanagement.Entities.Custodian;
+import com.org.kelvo.assetmanagement.Entities.Department;
+import com.org.kelvo.assetmanagement.Entities.Location;
 import com.org.kelvo.assetmanagement.Services.AssetService;
+import com.org.kelvo.assetmanagement.Services.CustodianService;
+import com.org.kelvo.assetmanagement.Services.DepartmentService;
+import com.org.kelvo.assetmanagement.Services.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,17 +25,57 @@ public class AssetController {
     @Autowired
     private AssetService assetService;
 
+    @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private CustodianService custodianService;
+
     @GetMapping("/assets")
     public List<Asset> getAssets(){
         return assetService.getAllAssets();
     }
 
     @PostMapping("/assets")
-    public Asset addAsset(@RequestBody Asset asset){
+    /*public Asset addAsset(@RequestBody Asset asset){
 
         //System.out.println("Passed location"+asset.getLocationId());
         log.info("New asset is {}",asset);
         return assetService.addNewAsset(asset);
+    }*/
+
+    public ResponseEntity<Asset> createComment(@RequestBody Asset asset) {
+       /* Asset asset1 = locationService.getLocationById(asset.getLocationId()).map(location -> {
+            asset.setLocation((Location) location);
+            return assetService.addNewAsset(asset);
+        }).orElseThrow(() -> new ResourceNotFoundException("Not found Location with id = " + asset.getLocationId()));*/
+
+       Optional<Location> location = locationService.getLocationById(asset.getLocationId());
+       if (location.isPresent()){
+
+
+           Optional<Department> department = departmentService.findDepartmentById(asset.getDepartmentId());
+
+           if(department.isPresent()){
+               Optional<Custodian> custodian = custodianService.getCustodianById(asset.getCustodianId());
+
+               if (custodian.isPresent()) {
+                   asset.setDepartment(department.get());
+                   asset.setLocation(location.get());
+                   assetService.addNewAsset(asset);
+               }else{
+                   return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+               }
+           }else {
+               return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+           }
+       }
+
+
+        return new ResponseEntity<>(asset, HttpStatus.CREATED);
     }
 
     @GetMapping("/assets/{id}")
