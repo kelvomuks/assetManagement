@@ -5,6 +5,7 @@ import com.org.kelvo.assetmanagement.Entities.Location;
 import com.org.kelvo.assetmanagement.Services.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +19,10 @@ public class LocationController {
     @Autowired
     private LocationService locationService;
 
-    @GetMapping("/location")
-    public List<Location> getLocation(){
+    @GetMapping("/location/{page}/{size}")
+    public Page<Location> getLocation(@PathVariable (required = false )int page, @PathVariable (required = false ) int size){
 
-        return locationService.getLocations();
+        return locationService.getLocations(page,size);
     }
 
     @PostMapping("/location")
@@ -29,4 +30,12 @@ public class LocationController {
 
         return locationService.addNewLocation(location);
     }
+
+  /*  @PostMapping("/location")
+    public String addNewLocation(){
+
+        locationService.addNewLocation();
+
+        return "Ok";
+    }*/
 }

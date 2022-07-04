@@ -30,11 +30,13 @@ public class Asset {
     @Transient
     private Location Location;
     private Long locationId;
+ //   @Column(name = "department")
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "department_id",referencedColumnName ="DepartmentId",insertable = false,updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Transient
     private Department department;
+  //  @Column(name = "department")
     private Long departmentId;
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "custodian_id",referencedColumnName ="CustodianId",insertable = false,updatable = false)
@@ -42,4 +44,6 @@ public class Asset {
     @Transient
     private Custodian custodian;
     private Long custodianId;
+
+
 }

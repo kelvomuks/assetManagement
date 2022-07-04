@@ -5,6 +5,8 @@ import com.org.kelvo.assetmanagement.Repositories.LocationRepository;
 import com.org.kelvo.assetmanagement.Services.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +19,27 @@ public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
     @Override
-    public List<Location> getLocations() {
-        return locationRepository.findAll();
+    public Page<Location> getLocations(int page,int size) {
+        PageRequest paging = PageRequest.of(page,size);
+        Page<Location> locations = locationRepository.findAll(paging);
+        return locations;
     }
 
     @Override
     public Location addNewLocation(Location location) {
+
         return locationRepository.save(location);
     }
+
+   /* // @Override
+     @PostConstruct
+    public void addNewLocation() {
+
+         List<Location> locations = IntStream.rangeClosed(0,30)
+                         .mapToObj(i -> new Location(null,"location"+i,"code"+i))
+                                 .collect(Collectors.toList());
+         locationRepository.saveAll(locations);
+    }*/
 
     @Override
     public Optional<Location> getLocationById(Long locationId) {

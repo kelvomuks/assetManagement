@@ -1,6 +1,7 @@
 package com.org.kelvo.assetmanagement.Services;
 
 import com.org.kelvo.assetmanagement.Entities.Asset;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public interface AssetService {
 
-    List<Asset> getAllAssets();
+    Page<Asset> getAllAssets(int page, int size);
 
     Asset addNewAsset(Asset asset);
 

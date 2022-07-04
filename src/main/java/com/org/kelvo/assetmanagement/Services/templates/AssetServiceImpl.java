@@ -5,9 +5,10 @@ import com.org.kelvo.assetmanagement.Repositories.AssetRepository;
 import com.org.kelvo.assetmanagement.Services.AssetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +18,12 @@ public class AssetServiceImpl implements AssetService {
     private AssetRepository assetRepository;
 
     @Override
-    public List<Asset> getAllAssets() {
-        return assetRepository.findAll();
+    public Page<Asset> getAllAssets(int page,int size) {
+        PageRequest paging = PageRequest.of(page, size);
+
+        Page<Asset> pagedResult = assetRepository.findAll(paging);
+
+       return pagedResult;
     }
 
     @Override

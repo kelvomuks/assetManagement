@@ -11,6 +11,7 @@ import com.org.kelvo.assetmanagement.Services.DepartmentService;
 import com.org.kelvo.assetmanagement.Services.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,29 +35,16 @@ public class AssetController {
     @Autowired
     private CustodianService custodianService;
 
-    @GetMapping("/assets")
-    public List<Asset> getAssets(){
-        return assetService.getAllAssets();
+    @GetMapping("/assets/{page}/{size}")
+    public Page<Asset> getAssets(@PathVariable(required = false) Integer page,@PathVariable(required = false) Integer size){
+
+        return assetService.getAllAssets(page, size);
     }
 
     @PostMapping("/assets")
-    /*public Asset addAsset(@RequestBody Asset asset){
-
-        //System.out.println("Passed location"+asset.getLocationId());
-        log.info("New asset is {}",asset);
-        return assetService.addNewAsset(asset);
-    }*/
-
     public ResponseEntity<Asset> createComment(@RequestBody Asset asset) {
-       /* Asset asset1 = locationService.getLocationById(asset.getLocationId()).map(location -> {
-            asset.setLocation((Location) location);
-            return assetService.addNewAsset(asset);
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found Location with id = " + asset.getLocationId()));*/
-
        Optional<Location> location = locationService.getLocationById(asset.getLocationId());
        if (location.isPresent()){
-
-
            Optional<Department> department = departmentService.findDepartmentById(asset.getDepartmentId());
 
            if(department.isPresent()){
